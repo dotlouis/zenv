@@ -1,3 +1,5 @@
+import { ZodType, ZodDefault } from 'zod'
+
 export default function (schema, env = process.env, options = {}) {
   try {
     return parseEnv(schema, env, options)
@@ -16,7 +18,7 @@ export function parseEnv(schema, obj, { publicPrefix } = {}) {
     let masked = '***' // mask secrets by default
     let success = true
 
-    if (varValue instanceof z.ZodType) {
+    if (varValue instanceof ZodType) {
       const validation = varValue.safeParse(obj[varName])
       success = validation.success
 
@@ -24,7 +26,7 @@ export function parseEnv(schema, obj, { publicPrefix } = {}) {
         masked = success ? validation.data : obj[varName] // expose public envs
       }
 
-      defaulted = varValue instanceof z.ZodDefault && obj[varName] === undefined
+      defaulted = varValue instanceof ZodDefault && obj[varName] === undefined
       overallSuccess = overallSuccess && success
     }
 
