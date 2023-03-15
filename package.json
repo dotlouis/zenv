@@ -4,8 +4,9 @@
   "description": "Parse and validate environment variables using zod",
   "main": "index.mjs",
   "type": "module",
-  "author": "",
+  "author": "https://github.com/dotlouis",
   "license": "ISC",
+  "repository": "https://github.com/dotlouis/zenv",
   "peerDependencies": {
     "zod": "^3.21.4"
   }
