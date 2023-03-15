@@ -16,6 +16,7 @@ _Note: `zod` package is required as a peer dependency._
 import { z } from 'zod'
 import { zenv } from '@dotlouis/zenv'
 
+// be careful to pass a literal object to zenv and NOT a z.object()
 const env = zenv(
   {
     DATABASE_URL: z.string().url(), // use zod type validators as  you would normaly
@@ -36,3 +37,7 @@ const env = zenv(
 #### Example result
 
 <img width="603" alt="CleanShot 2023-03-15 at 13 37 52@2x" src="https://user-images.githubusercontent.com/1891109/225311482-466d2c0c-4d2f-49e9-b22b-78e184d889c7.png">
+
+#### Notes
+
+- Be careful to pass a literal object `{}` to zenv() and NOT a `z.object()`
