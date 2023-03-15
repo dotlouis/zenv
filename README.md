@@ -32,3 +32,7 @@ const env = zenv(
   },
 )
 ```
+
+#### Example result
+
+<img width="603" alt="CleanShot 2023-03-15 at 13 37 52@2x" src="https://user-images.githubusercontent.com/1891109/225311482-466d2c0c-4d2f-49e9-b22b-78e184d889c7.png">
