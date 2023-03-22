@@ -28,6 +28,12 @@ export function parseEnv(schema, obj, { publicPrefix } = {}) {
 
       defaulted = varValue instanceof ZodDefault && obj[varName] === undefined
       overallSuccess = overallSuccess && success
+
+      if (success) {
+        envObj[varName] = validation.data
+      }
+    } else {
+      envObj[varName] = varValue
     }
 
     console.info(
@@ -43,7 +49,6 @@ export function parseEnv(schema, obj, { publicPrefix } = {}) {
             varValue.description ? `-- ${varValue.description}` : ''
           }${'\x1b[0m'}`,
     )
-    envObj[varName] = obj[varName]
   }
 
   if (!overallSuccess) throw new Error('Missing environment variable')

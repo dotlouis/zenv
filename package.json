@@ -1,6 +1,6 @@
 {
   "name": "@dotlouis/zenv",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Parse and validate environment variables using zod",
   "main": "index.mjs",
   "type": "module",
