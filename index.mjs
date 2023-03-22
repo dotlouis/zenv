@@ -9,7 +9,7 @@ export default function (schema, env = process.env, options = {}) {
   }
 }
 
-export function parseEnv(schema, obj, { publicPrefix } = {}) {
+export function parseEnv(schema, obj, { publicPrefix, display = true } = {}) {
   const envObj = {}
   let overallSuccess = true
 
@@ -36,19 +36,21 @@ export function parseEnv(schema, obj, { publicPrefix } = {}) {
       envObj[varName] = varValue
     }
 
-    console.info(
-      success
-        ? `🟢 ${varName} = ${defaulted ? '\x1b[33m' : '\x1b[34m'}${masked}${
-            defaulted
-              ? ` (default) ${'\x1b[0m'}${
-                  varValue.description ? `-- ${varValue.description}` : ''
-                }`
-              : ''
-          }${'\x1b[0m'}` // available colors at https://stackoverflow.com/a/40560590/3988308
-        : `🔴 ${varName} ${
-            varValue.description ? `-- ${varValue.description}` : ''
-          }${'\x1b[0m'}`,
-    )
+    if (display) {
+      console.info(
+        success
+          ? `🟢 ${varName} = ${defaulted ? '\x1b[33m' : '\x1b[34m'}${masked}${
+              defaulted
+                ? ` (default) ${'\x1b[0m'}${
+                    varValue.description ? `-- ${varValue.description}` : ''
+                  }`
+                : ''
+            }${'\x1b[0m'}` // available colors at https://stackoverflow.com/a/40560590/3988308
+          : `🔴 ${varName} ${
+              varValue.description ? `-- ${varValue.description}` : ''
+            }${'\x1b[0m'}`,
+      )
+    }
   }
 
   if (!overallSuccess) throw new Error('Missing environment variable')
