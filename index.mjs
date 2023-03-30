@@ -1,4 +1,4 @@
-import { ZodType, ZodDefault } from 'zod'
+import { ZodType, ZodDefault, ZodOptional } from 'zod'
 
 export default function (schema, env = process.env, options = {}) {
   try {
@@ -17,6 +17,7 @@ export function parseEnv(schema, obj, { publicPrefix, display = true } = {}) {
     let defaulted = false
     let masked = '***' // mask secrets by default
     let success = true
+    let optional = false
 
     if (varValue instanceof ZodType) {
       const validation = varValue.safeParse(obj[varName])
@@ -29,6 +30,8 @@ export function parseEnv(schema, obj, { publicPrefix, display = true } = {}) {
       defaulted = varValue instanceof ZodDefault && obj[varName] === undefined
       overallSuccess = overallSuccess && success
 
+      optional = varValue instanceof ZodOptional
+
       if (success) {
         envObj[varName] = validation.data
       }
@@ -37,18 +40,22 @@ export function parseEnv(schema, obj, { publicPrefix, display = true } = {}) {
     }
 
     if (display) {
+      const description = varValue.description
+        ? `-- ${varValue.description}`
+        : ''
+      const optionalUnset = optional && obj[varName] === undefined
       console.info(
         success
-          ? `🟢 ${varName} = ${defaulted ? '\x1b[33m' : '\x1b[34m'}${masked}${
-              defaulted
-                ? ` (default) ${'\x1b[0m'}${
-                    varValue.description ? `-- ${varValue.description}` : ''
-                  }`
-                : ''
-            }${'\x1b[0m'}` // available colors at https://stackoverflow.com/a/40560590/3988308
-          : `🔴 ${varName} ${
-              varValue.description ? `-- ${varValue.description}` : ''
-            }${'\x1b[0m'}`,
+          ? `${optional ? (optionalUnset ? '⚪' : '🔘') : '🟢'} ${varName} ${
+              optional ? '(optional)' : ''
+            } ${
+              optionalUnset
+                ? description
+                : `= ${defaulted ? '\x1b[33m' : '\x1b[34m'}${masked}${
+                    defaulted ? ` (default) ${'\x1b[0m'}${description}` : ''
+                  }${'\x1b[0m'}`
+            }` // available colors at https://stackoverflow.com/a/40560590/3988308
+          : `🔴 ${varName} ${description}${'\x1b[0m'}`,
       )
     }
   }
